@@ -54,6 +54,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     default:
       break
     }
+    self.setupTextFields()
   }
 
 
@@ -63,13 +64,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     return self.selectedPerson.lastName
   }
 
-  func setupTextFields() {  // Actually, I don't think I want to use this in my app:]
+  func setupTextFields() {
     self.firstNameTextField.delegate = self
     self.lastNameTextField.delegate = self
     self.firstNameTextField.tag = 0
     self.lastNameTextField.tag = 1
-    self.firstNameTextField.text = self.selectedPerson.firstName  // I was definately NOT going to use these two, so ...
-    self.lastNameTextField.text = self.selectedPerson.lastName   // ... not point in having the func in my app. 
+    self.firstNameTextField.text = ""  // Because, I intend to make a guessing game in DetailViewController.
+    self.lastNameTextField.text = ""
   }
 
   func textFieldShouldReturn(textField: UITextField) -> Bool {
