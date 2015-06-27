@@ -19,7 +19,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIImagePicker
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    let imageWhichMatchesSelectedPerson = setupTextFields(1)  // Fun with overloading:]
+    let tupleOfFirstAndLastNames = setupTextFields(1)
+    let imageWhichMatchesSelectedPerson =  tupleOfFirstAndLastNames.1 // Fun with overloading:]
     switch imageWhichMatchesSelectedPerson {
     case "Woolley":
       let imageOfme = UIImage(named: "me")
@@ -51,17 +52,29 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     case "Weinberg":
       let imageOfStevenWeinberg = UIImage(named: "StevenWeinberg")
       self.imageView.image = imageOfStevenWeinberg
+    case "Asimov":
+      var imageOfIsaacAsimov = UIImage(named: "IsaacAsimov")
+      self.imageView.image = imageOfIsaacAsimov
     default:
       break
     }
     self.setupTextFields()
+/*
+    if lastNameTextField.text == "" && firstNameTextField.text == "" {
+
+
+    } else {
+      // leave the lastNameTextField "blank" with its place-holder text
+    }
+*/
   }
 
 
 // Fun with overloading:]
-  func setupTextFields(shortVer: Int) -> String {
+  func setupTextFields(shortVer: Int) -> (String, String) {
+    self.firstNameTextField.delegate = self
     self.lastNameTextField.delegate = self
-    return self.selectedPerson.lastName
+    return (self.selectedPerson.firstName, self.selectedPerson.lastName)
   }
 
   func setupTextFields() {
@@ -69,8 +82,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     self.lastNameTextField.delegate = self
     self.firstNameTextField.tag = 0
     self.lastNameTextField.tag = 1
+    self.firstNameTextField.text = self.selectedPerson.firstName
+    self.lastNameTextField.text = self.selectedPerson.lastName
     self.firstNameTextField.text = ""  // Because, I intend to make a guessing game in DetailViewController.
     self.lastNameTextField.text = ""
+    self.cameraMissingAlert.textColor = UIColor.blueColor()
+    self.cameraMissingAlert.text = "Guess this man's name"
   }
 
   func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -78,8 +95,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     return true // or false
   }
 
-  func textFieldDidEndEditing(textField: UITextField) {  // use more-clear switch to asign per tags
-    switch textField.tag {
+
+  func textFieldDidEndEditing(textField: UITextField) {  // Called by UITextFieldDelegate protocol.
+    switch textField.tag {                          // Used the more-clear switch to asign per tags.
     case 0:
       self.selectedPerson.firstName = textField.text
     case 1:
@@ -87,6 +105,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate, UIImagePicker
     default:
       break
     }
+    //self.cameraMissingAlert.textColor = UIColor.blackColor()
+      if self.lastNameTextField.text == "" && self.firstNameTextField.text == "" {
+        println(self.selectedPerson.firstName)
+        self.cameraMissingAlert.textColor = UIColor.greenColor()
+        self.cameraMissingAlert.text = "You got it!"
+      } else {
+        self.cameraMissingAlert.textColor = UIColor.redColor()
+        self.cameraMissingAlert.text = "Opps, try again"
+      }
   }
 
 
